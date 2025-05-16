@@ -1,0 +1,528 @@
+One key polls
+
+F1 = 00 - General Poll, address 0
+F2 = 00 - General Poll, address 1
+F3 = 00 - General Poll, address 2
+
+Polling loop
+
+1 = Basic_38
+2 = Basic_1
+
+Filters:
+
+1 = Display One-Key Poll
+
+
+Step	
+1
+Create the following four exceptions on the EGM:
+11 – Slot door open
+12 – Slot door closed
+71 – Change lamp on
+72 – Change lamp off
+
+Start Loop 1.
+
+Expected Result
+
+No exceptions appear in the trace window.
+
+
+2
+
+Select Loop 2.
+
+Expected Result
+
+EGM sends the following 1-byte exceptions in response to the first four GP 81s:
+11 – Slot door open
+12 – Slot door closed
+71 – Change lamp on
+72 – Change lamp off
+
+3
+
+Stop Loop 2.
+Create the following two exceptions on the EGM:
+11 – Slot door open
+12 – Slot door closed
+
+Send F1, F3, F1, F3.
+
+Expected Result
+
+EGM does not reply.
+
+
+4
+Send F1, F2, F3, F2.
+
+Expected Result
+
+EGM responds to GP 81s with exceptions created in Step 3, and does not reply to F1 or F3.
+
+5
+Send F3, F2 repeatedly until exception 00 (No activity) is returned from the EGM.
+
+Expected Result
+
+EGM responds to F2 with exceptions left in the queue.
+If not exceptions left in the queue, EGM responds to F2 with 00.
+
+
+T4984077
+4.3 No Activity (00) 
+
+Polling loops
+
+1 = Minimal_1
+
+Filters
+
+1 = Display One-Key Poll
+
+
+Step	Expected Result
+1
+Remove all credits from the EGM.
+Start Loop.
+
+Expected Result:
+
+EGM sends 1-byte exception in response to general polls.
+
+2
+Set Filter: 'Display All Traces'.
+Continue logging until EGM sends 00 exception in response to general polls.
+
+Expected Result:
+
+EGM sends 1-byte data 00 in response to general polls.
+
+3
+Set Filter: 'Display One-Key Poll'.
+Open and close EGM door.
+
+
+
+EGM sends the following 1-byte exceptions in response to next two general polls:
+11 – Slot door open
+12 – Slot door closed
+
+Expected Result:
+
+
+EGM sends 1-byte exception 00, no activity, in response to all subsequent general polls
+
+
+T4984079
+4.5 Buffer Overflow (70) (completed)
+
+One key polls
+F1 = 00 – General Poll, address 0
+F2 = 00 – General Poll, address 1
+F3 = 1F Send gaming machine ID and information, address 1
+
+Polling Loops
+
+1 = Basic_No General
+
+Filters
+
+1 = Display One-Key Poll
+
+
+Start Loop 1
+Send F1 to make sure communication is synchronized.
+Create more than 20 exceptions:
+11 - Slot door was opened.
+84 - Self test or operator menu has been entered.
+12 - Slot door was closed.
+85 - Self test or operator menu has been exited.
+82 - Display meters or attendant menu has been entered.
+83 - Display meters or attendant menu has been exited.
+71 - Change lamp on.
+72 - Change lamp off.
+82 - Display meters or attendant menu has been entered.
+83 - Display meters or attendant menu has been exited.
+11 - Slot door was opened.
+84 - Self test or operator menu has been entered.
+71 - Change lamp on.
+72 - Change lamp off.
+12 - Slot door was closed.
+85 - Self test or operator menu has been exited.
+71 - Change lamp on.
+82 - Display meters or attendant menu has been entered.
+83 - Display meters or attendant menu has been exited.
+72 - Change lamp off.
+11 - Slot door was opened.
+84 - Self test or operator menu has been entered.
+12 - Slot door was closed.
+85 - Self test or operator menu has been exited.
+
+Send F2 repeatedly until 00 exceptions are seen. Open the exception window if needed.
+
+Expected Result:
+
+EGM sends 1-byte exceptions 70 in response to first GP
+EGM sends 1-byte exception in response to each of the GP 81s starting with the oldest exception that was in the queue. The oldest four exceptions are not reported—they are overwritten by the last four exceptions.
+
+2
+Create 21 exceptions:
+11 - Slot door was opened.
+84 - Self test or operator menu has been entered.
+12 - Slot door was closed.
+85 - Self test or operator menu has been exited.
+82 - Display meters or attendant menu has been entered.
+83 - Display meters or attendant menu has been exited.
+71 - Change lamp on.
+72 - Change lamp off.
+82 - Display meters or attendant menu has been entered.
+83 - Display meters or attendant menu has been exited.
+11 - Slot door was opened.
+84 - Self test or operator menu has been entered.
+71 - Change lamp on.
+72 - Change lamp off.
+12 - Slot door was closed.
+85 - Self test or operator menu has been exited.
+71 - Change lamp on.
+82 - Display meters or attendant menu has been entered.
+83 - Display meters or attendant menu has been exited.
+72 - Change lamp off.
+71 - Change lamp on.
+Stop Loop 1 and wait > 5 seconds.
+Send F1, F2, F2, F2, F3.
+
+Expected result:
+
+
+EGM sends 1-byte exception 70, Buffer Overflow, in response to first two GP 81s and may or may not respond to third GP 81.
+EGM responds to LP 1F with EGM information.
+
+
+3
+Send F1, F2, F3.
+
+Expected Result:
+
+EGM sends same 1-byte exception 70, Buffer Overflow, in response to GP 81 and responds to LP 1F.
+EGM responds to LP 1F with EGM information.
+
+4
+Send F1, F2 repeatedly until exception 00s are seen. Use the exception window if needed.
+
+Expected Result:
+
+Exceptions reported in following order:
+84 - Self test or operator menu has been entered.
+12 - Slot door was closed.
+85 - Self test or operator menu has been exited.
+82 - Display meters or attendant menu has been entered.
+83 - Display meters or attendant menu has been exited.
+71 - Change lamp on.
+72 - Change lamp off.
+82 - Display meters or attendant menu has been entered.
+83 - Display meters or attendant menu has been exited.
+11 - Slot door was opened.
+84 - Self test or operator menu has been entered.
+71 - Change lamp on.
+72 - Change lamp off.
+12 - Slot door was closed.
+85 - Self test or operator menu has been exited.
+71 - Change lamp on.
+82 - Display meters or attendant menu has been entered.
+83 - Display meters or attendant menu has been exited.
+72 - Change lamp off.
+71 - Change lamp on.
+00 - No Activity.
+
+
+T4984080
+4.6 Priority Exceptions (completed)
+
+One key polls
+
+F1 = 00 General Poll, address 0
+F2 = 00 General Poll, address 1
+F3 = 1F Send gaming machine ID and information, address 1
+F4 = 1B Send hand pay information
+
+Polling loops
+Basic_No General
+
+Filters
+1 = Display One-Key Poll
+
+
+Start Loop 1.
+Send F1 to make sure communication is synchronized.
+Insert more than $100 credits on EGM. (Transferlimits for AFT/TiTo gets exceeded)
+Press cash out button.
+
+Expected Result
+
+EGM goes into hand pay lockup.
+
+2
+Send F2 once.
+
+Expected Result:
+
+EGM sends 1-byte exception 51, handpay pending, in response to GP 81.
+
+3
+Create more than 20 exceptions:
+11 - Slot door was opened.
+84 - Self test or operator menu has been entered.
+12 - Slot door was closed.
+85 - Self test or operator menu has been exited.
+13 - Drop door was opened.
+14 - Drop door was closed.
+71 - Change lamp on.
+72 - Change lamp off.
+13 - Drop door was opened.
+14 - Drop door was closed.
+11 - Slot door was opened.
+84 - Self test or operator menu has been entered.
+71 - Change lamp on.
+72 - Change lamp off.
+12 - Slot door was closed.
+85 - Self test or operator menu has been exited.
+71 - Change lamp on.
+13 - Drop door was opened.
+14 - Drop door was closed.
+72 - Change lamp off.
+11 - Slot door was opened.
+84 - Self test or operator menu has been entered.
+12 - Slot door was closed.
+85 - Self test or operator menu has been exited.
+Send F2 until EGM reports 00 - No Activity.
+
+Expected Result
+
+EGM reports following exception:
+51 - Handpay Info. (Exception is higher prioritized)
+70 - Buffer Overflow.
+13 - Display meters or attendant menu has been entered.
+14 - Display meters or attendant menu has been exited.
+71 - Change lamp on.
+72 - Change lamp off.
+13 - Drop door was opened.
+14 - Drop door was closed.
+11 - Slot door was opened.
+84 - Self test or operator menu has been entered.
+71 - Change lamp on.
+72 - Change lamp off.
+12 - Slot door was closed.
+85 - Self test or operator menu has been exited.
+71 - Change lamp on.
+13 - Drop door was opened.
+14 - Drop door was closed.
+72 - Change lamp off.
+11 - Slot door was opened.
+84 - Self test or operator menu has been entered.
+12 - Slot door was closed.
+85 - Self test or operator menu has been exited.
+00 - No Activity.
+
+4
+Send F4 and reset hand pay.
+
+Expected Result
+
+EGM responds to F4 with proper handpay information.
+
+5
+Create more than 20 exceptions:
+11 - Slot door was opened.
+84 - Self test or operator menu has been entered.
+12 - Slot door was closed.
+85 - Self test or operator menu has been exited.
+13 - Drop door was opened.
+14 - Drop door was closed.
+71 - Change lamp on.
+72 - Change lamp off.
+13 - Drop door was opened.
+14 - Drop door was closed.
+11 - Slot door was opened.
+84 - Self test or operator menu has been entered.
+71 - Change lamp on.
+72 - Change lamp off.
+12 - Slot door was closed.
+85 - Self test or operator menu has been exited.
+71 - Change lamp on.
+13 - Drop door was opened.
+14 - Drop door was closed.
+72 - Change lamp off.
+11 - Slot door was opened.
+84 - Self test or operator menu has been entered.
+12 - Slot door was closed.
+85 - Self test or operator menu has been exited.
+Send F2 until EGM responds with 00 - No Activity.
+
+Expected Result
+
+EGM reports following exception:
+52 - Handpay Reset. (Exception is higher prioritized)
+70 - Buffer Overflow.
+13 - Drop door was opened.
+14 - Drop door was closed.
+71 - Change lamp on.
+72 - Change lamp off.
+13 - Drop door was opened.
+14 - Drop door was closed.
+11 - Slot door was opened.
+84 - Self test or operator menu has been entered.
+71 - Change lamp on.
+72 - Change lamp off.
+12 - Slot door was closed.
+85 - Self test or operator menu has been exited.
+71 - Change lamp on.
+13 - Drop door was opened.
+14 - Drop door was closed.
+72 - Change lamp off.
+11 - Slot door was opened.
+84 - Self test or operator menu has been entered.
+12 - Slot door was closed.
+85 - Self test or operator menu has been exited.
+00 - No Activity.
+
+
+
+T4984081
+4.7 Operator Changed Options (3C) (completed)
+
+One key polls
+
+F1 = 1F Send gaming machine ID and information, address 38
+
+
+Polling loops
+
+1 = Minimal_1
+2 = Basic_38
+
+Filters
+
+1 = Display One-Key Poll
+
+
+
+Start Loop 1.
+Open Exception window if needed.
+Enter EGM configuration mode, change jackpot limit, and exit. (See note: Set Jackpot Limit)
+
+Expected Result
+
+EGM sends one 1-byte exception 3C, operator changed options, in response to general poll after exiting configuration mode.
+
+
+2
+Enable and disable a game. (See note: Enable/Disable Game)
+Exit the configuration menu.
+
+
+Expected Result
+EGM sends one 1-byte exception 3C, operator changed options, in response to general poll after exiting configuration mode.
+3C muss nicht zwangsläufig beim verlassen des Menüs geworfen werden sondern kann auch nach der Änderung selber gesendet werden. In den Anforderungen steht nichts über den genauen Zeitpunkt drin.
+
+3
+Enter EGM configuration and change the SAS address to 38 [decimal]. (See note: Set EGM Address)
+Exit the configuration menu.
+Start Loop 2.
+
+
+Expected Result
+
+
+EGM sends one 1-byte exception 3C, operator changed options, in response to general poll.
+4
+Send F1.
+
+Expected Result
+
+EGM responds to F1 with EGM information.
+
+5
+Set EGM address back to 1. (See note: Set EGM Address)
+
+
+T4984082
+4.8 Attendant Out of Service (86)
+
+
+F1 = 01 – Shutdown, address 1
+F2 = 02 – Startup, address 1
+
+1 = Minimal_1
+
+1 = Display One-Key Poll
+
+
+
+Step	Expected Result
+1
+ 
+
+Blank 
+
+ 
+
+2
+Start Loop 1.
+Open Exception window if needed.
+Enter operator menu and enable Service Lock. (See note: Set Service Lock)
+
+Expected Result
+
+EGM responds with one 1-byte exception 86, out of service, to general poll.
+3
+Disable Service Lock. (See note: Set Service Lock)
+
+Expected Result
+
+EGM doesn't reports exception 86.
+4
+Send F1.
+
+Expected Result
+EGM ACKs F1 and is not playable.
+EGM does not send exception 86, out of service.
+
+
+5
+Send F2.
+
+Expected Result
+
+EGM ACKs F2 and is playable.
+
+
+
+T4984088
+4.14 Soft Meter Reset (7A) 
+
+Other key polls
+
+(None)
+
+Polling loops
+
+1 = Minimal_1
+
+Filters
+
+1 = Display One-Key Poll
+
+Step	
+1
+Start Loop 1. 
+Open Exception window if needed.
+Reset EGM lifetime meters by RAM clear.
+
+
+
+Expected Result
+EGM responds with one 1-byte exception 7A, soft meter reset, to general poll each time lifetime meters are reset—that is, set to zero.
+
