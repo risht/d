@@ -1,0 +1,71 @@
+Unlock the driver:Merkur@123
+
+System lock:0120493
+
+Rasperry Key:ssh admin@192.168.3.22
+
+password:admin
+
+egm:ssh admin@192.168.2.3
+
+password:admin
+
+Command to open main door: python gpio_interface.py maindoor open
+
+Start Menu:python gpio_interface.py start p
+
+Service open: python service_open.py
+
+Service Close: python close_service.py
+
+Attedandt:python gpio_interface.py a o(Attendant Menu) 
+
+Close:python gpio_interface.py a c
+
+Payout command: python gpio_interface.py payout p
+
+Operator:python gpio_interface.py o o(Operator Menu)
+
+Close command: python gpio_interface.py o c
+
+Closing all doors: python all_off.py
+
+To turn on and off lights :python gpio_interface.py service p
+
+Maindoor close: python gpio_interface.py o c
+
+Calibration touch : python gpio_interface.py maindoor open
+
+python gpio_interface.py start p
+
+Note:Attendant ke case main main door kholne ki zarrorat nahi hai but in case of operator main door kholna padega with command python gpio_interface.py maindoor open
+
+python command to test connections(Channel Configurations):python -m pytest .\test\sas_protocol\test_sas_flush.py -sv
+
+Enviram to be done 
+
+Command
+wflash /app && rm
+
+To run after enviram
+
+ssh adp@192.168.2.3
+
+Password:fx!erhi117e%
+gm
+cd ../..
+ls
+
+Command for giving user access:sudo chmod 777 usr
+
+usr
+
+First 
+Enviram clear :dd if=/dev/zero of=/dev/rdadp || true
+
+set_egm
+click_to_egm
+
+
+
+ 
